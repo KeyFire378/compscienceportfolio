@@ -1,0 +1,15 @@
+head {
+background-color: black;
+}
+h1 {
+color: white;
+border: 2px solid white;
+padding: 30px;
+margin: 10px;
+}
+body {
+background-color: blue;
+}
+a {
+color: orange;
+}
