@@ -11,7 +11,7 @@ padding: 30px;
 margin: 10px;
 }
 body {
-background-image: conic-gradient(white, lightgray, gray);
+background-image: conic-gradient(white, lightgray, gray, lightgray);
 font-color: white;
 }
 a {
