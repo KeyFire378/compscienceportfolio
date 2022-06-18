@@ -3,7 +3,7 @@ background-color: black;
 }
 h1 {
 color: white;
-background-color: darkgray;
+background-image: radial-gradient(lightblue, darkgray);
 border: 2px solid white;
 padding: 30px;
 margin: 10px;
