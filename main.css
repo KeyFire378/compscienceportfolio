@@ -13,6 +13,21 @@ margin: 10px;
 }
 button {
 white-space: pre-line;
+display: block;
+text-decoration: underline;
+/*These are the almost exact same settings from h1  */
+color: gray;
+text-shadow: 2px 2px 4px;
+background-image: radial-gradient(lightblue, darkgray);
+text-align: center;
+border: 2px solid white;
+border-radius: 10px;
+padding: 30px;
+margin: 10px;
+}
+button:hover {
+color: darkorange;
+cursor: pointer;
 }
 body {
 background-image: conic-gradient(lightgray, lavender, lightsteelblue);
