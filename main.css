@@ -13,7 +13,8 @@ margin: 10px;
 }
 button {
 white-space: pre-line;
-display: block;
+display: flex;
+justify-content: center;
 text-decoration: underline;
 /*These are the almost exact same settings from h1  */
 color: gray;
