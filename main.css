@@ -12,10 +12,12 @@ padding: 30px;
 margin: 10px;
 }
 button {
-white-space: pre-line;
 display: flex;
 justify-content: center;
 text-decoration: underline;
+width: 35%;
+margin: auto;
+margin-top: 2%;
 /*These are the almost exact same settings from h1  */
 color: gray;
 text-shadow: 2px 2px 4px;
@@ -24,7 +26,6 @@ text-align: center;
 border: 2px solid white;
 border-radius: 10px;
 padding: 30px;
-margin: 10px;
 }
 button:hover {
 color: darkorange;
@@ -32,7 +33,6 @@ cursor: pointer;
 }
 body {
 background-image: conic-gradient(lightgray, lavender, lightsteelblue);
-font-color: white;
 }
 a {
 color: orange;
