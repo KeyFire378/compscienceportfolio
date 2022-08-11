@@ -10,14 +10,12 @@ border: 2px solid white;
 border-radius: 10px;
 padding: 30px;
 margin: 10px;
+margin-bottom: 20px;
 }
 button {
 display: flex;
 justify-content: center;
 text-decoration: underline;
-width: 35%;
-margin: auto;
-margin-top: 2%;
 /*These are the almost exact same settings from h1  */
 color: gray;
 text-shadow: 2px 2px 4px;
@@ -31,9 +29,18 @@ button:hover {
 color: darkorange;
 cursor: pointer;
 }
+.centerbtns {
+display: flex;
+flex-flow: column nowrap;
+width: 35%;
+gap: 36px;
+margin: auto;
+
+}
 body {
 background-image: conic-gradient(lightgray, lavender, lightsteelblue);
 }
+#more {display: inline;}
 a {
 color: orange;
 }
