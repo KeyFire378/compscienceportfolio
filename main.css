@@ -29,6 +29,7 @@ button:hover {
 color: darkorange;
 cursor: pointer;
 }
+/* This small section is specifically for the About Me page */
 .centerbtns {
 display: flex;
 flex-flow: column nowrap;
@@ -36,6 +37,18 @@ width: 35%;
 gap: 36px;
 margin: auto;
 
+}
+.collapsable {
+background-image: linear-gradient(to bottom right, gainsboro, powderblue);
+border: 2px solid aliceblue;
+border-radius: 10px;
+}
+.collapsable button {
+margin: 1%;
+background: none;
+background-image: url("darrow.svg");
+background-size: 68px;
+border: none;
 }
 body {
 background-image: conic-gradient(lightgray, lavender, lightsteelblue);
