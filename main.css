@@ -38,12 +38,12 @@ gap: 36px;
 margin: auto;
 
 }
-.collapsable {
+.collapsible {
 background-image: linear-gradient(to bottom right, gainsboro, powderblue);
 border: 2px solid aliceblue;
 border-radius: 10px;
 }
-.collapsable button {
+.collapsible button {
 margin: 1%;
 background: none;
 text-decoration: none;
