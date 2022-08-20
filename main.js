@@ -5,9 +5,9 @@ function fontfix() {
     movtext.style.fontSize = ptext.style.fontSize;
 }
 // This is where the functions begin
-function hidetxt() {
-    var more = document.getElementById("more");
-    var btnText = document.getElementById("myBtn");
+function hidetxt(stuff, btn) {
+    var more = document.getElementById(stuff);
+    var btnText = document.getElementById(btn);
     if (more.style.display === "inline") {
         btnText.style.backgroundImage = "url(uparrow.svg)";
         more.style.display = "none";
