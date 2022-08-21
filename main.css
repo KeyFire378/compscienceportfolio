@@ -12,6 +12,9 @@ padding: 30px;
 margin: 10px;
 margin-bottom: 20px;
 }
+h2 {
+float: right;
+}
 button {
 display: flex;
 justify-content: center;
