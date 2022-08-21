@@ -15,6 +15,7 @@ margin-bottom: 20px;
 h2 {
 display: flex;
 text-align: center;
+margin: auto;
 }
 button {
 display: flex;
