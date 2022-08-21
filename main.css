@@ -54,6 +54,7 @@ text-decoration: none;
 background-image: url("darrow.svg");
 background-size: 61px;
 border: none;
+float: left;
 }
 body {
 background-image: conic-gradient(lightgray, lavender, lightsteelblue);
