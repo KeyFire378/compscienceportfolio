@@ -42,6 +42,7 @@ margin: auto;
 background-image: linear-gradient(to bottom right, gainsboro, powderblue);
 border: 2px solid aliceblue;
 border-radius: 10px;
+margin: 10px;
 }
 .collapsible button {
 margin: 1%;
