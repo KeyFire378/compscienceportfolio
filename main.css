@@ -73,6 +73,9 @@ background-size: 61px;
 border: none;
 float: left;
 }
+.collapsible p {
+padding: 30px;
+}
 body {
 background-image: conic-gradient(lightgray, lavender, lightsteelblue);
 }
