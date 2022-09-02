@@ -3,7 +3,7 @@ background-color: black;
 }
 h1 {
 color: white;
-text-shadow: 2px 2px 4px;
+text-shadow: gray 2px 2px 4px;
 background-image: radial-gradient(lightblue, darkgray);
 text-align: center;
 border: 2px solid white;
@@ -26,6 +26,10 @@ margin-top: 1%;
 margin-bottom: 1%;
 padding: 15px;
 font-size: 4vw;
+}
+h3 {
+color: honeydew;
+text-shadow: darkslateblue 2px 2px 4px;
 }
 button {
 display: flex;
