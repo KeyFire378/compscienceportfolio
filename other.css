@@ -46,7 +46,8 @@ padding: 30px;
 }
 button:hover {
 color: #ccaf9b;
-border: 2px solid royalblue;
+background-color: royalblue;
+border: 2px solid #6a6d81;
 cursor: pointer;
 }
 /* This small section is specifically for the About Me page */
