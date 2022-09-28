@@ -4,7 +4,7 @@ background-color: black;
 h1 {
 color: #ccaf9b;
 text-shadow: darkgoldenrod 2px 2px 4px;
-background-color: #02134c;
+background-image: radial-gradient(royalblue,#02134c);
 text-align: center;
 border: 2px solid #416fe0;
 border-radius: 10px;
