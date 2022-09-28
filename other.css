@@ -1,0 +1,86 @@
+head {
+background-color: black;
+}
+h1 {
+color: #ccaf9b;
+text-shadow: darkgoldenrod 2px 2px 4px;
+background-color: #02134c;
+text-align: center;
+border: 2px solid #416fe0;
+border-radius: 10px;
+padding: 30px;
+margin: 10px;
+margin-bottom: 20px;
+}
+h2 {
+display: flex;
+text-align: center;
+background: linear-gradient(to bottom right, #02134c, royalblue);
+
+-webkit-text-fill-color: transparent;
+-webkit-background-clip: text;
+width: auto;
+justify-content: center;
+margin: auto;
+margin-top: 1%;
+margin-bottom: 1%;
+padding: 15px;
+font-size: 4vw;
+}
+h3 {
+color: #02134c;
+text-shadow: royalblue 1px 1px 13px;
+}
+button {
+display: flex;
+justify-content: center;
+text-decoration: underline;
+/*These are the almost exact same settings from h1  */
+color: #02134c;
+text-shadow: 2px 2px 4px;
+background-color: #6a6d81;
+text-align: center;
+border: 2px solid #ccaf9b;
+border-radius: 10px;
+padding: 30px;
+}
+button:hover {
+color: #ccaf9b;
+border: 2px solid royalblue;
+cursor: pointer;
+}
+/* This small section is specifically for the About Me page */
+.centerbtns {
+display: flex;
+flex-flow: column nowrap;
+width: 35%;
+gap: 36px;
+margin: auto;
+
+}
+.collapsible {
+background-color: #6a6d81;
+min-height: 70px;
+border: 2px solid #ccaf9b;
+border-radius: 10px;
+margin: 10px;
+}
+.collapsible button {
+margin: 1%;
+background: none;
+text-decoration: none;
+background-image: url("darrow.svg");
+background-size: 61px;
+border: none;
+float: left;
+}
+.collapsible p {
+padding: 30px;
+}
+body {
+background-color: #402740;
+}
+#more {display: inline;}
+a {
+color: orange;
+}
