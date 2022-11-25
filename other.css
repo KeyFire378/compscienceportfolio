@@ -46,6 +46,7 @@ padding: 30px;
 }
 button:hover {
 color: #ccaf9b;
+text-shadow: 2px 2px 4px #402740;
 background-color: royalblue;
 border: 2px solid #6a6d81;
 cursor: pointer;
@@ -76,6 +77,7 @@ border: none;
 float: left;
 }
 .collapsible p {
+display: block;
 padding: 30px;
 }
 body {
