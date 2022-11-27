@@ -3,10 +3,11 @@ function hidetxt(stuff, btn) {
     var more = document.getElementById(stuff);
     var btnText = document.getElementById(btn);
     if (more.style.display === "block") {
-        btnText.style.backgroundImage = "url(uparrow.svg)";
+        btnText.style.transform = "rotate(0deg)";
         more.style.display = "none";
     } else {
-        btnText.style.backgroundImage = "url(darrow.svg)";
+        btnText.style.transform = "rotate(180deg)";
         more.style.display = "block";
     }
+    
 }
