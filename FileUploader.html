@@ -9,11 +9,13 @@
 <body>
     <h1>Upload a file</h1>
     <div class="collapsible">
-    <form action="https://script.google.com/macros/s/AKfycbwQYzk9qhPCklPkbtL0R_MVrtQ_ia6lVV2wVg6OcE0xEW0gU_0mDYCwZZ6bfZ0Ooqhh/exec" id="form" method="post">
-        <div id="data"></div>
-        <input name="file" id="uploadfile" type="file">
-        <input id="submit" type="submit">
-    </form>
+        <div class="centerbtns">
+            <form action="https://script.google.com/macros/s/AKfycbwQYzk9qhPCklPkbtL0R_MVrtQ_ia6lVV2wVg6OcE0xEW0gU_0mDYCwZZ6bfZ0Ooqhh/exec" id="form" method="post">
+                <div id="data"></div>
+                <input name="file" id="uploadfile" type="file">
+                <input id="submit" type="submit">
+            </form>
+        </div>
     </div>
     <script>
     $('#uploadfile').on("change", function() {
