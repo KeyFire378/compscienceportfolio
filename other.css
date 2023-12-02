@@ -52,6 +52,12 @@ background-color: royalblue;
 border: 2px solid #6a6d81;
 cursor: pointer;
 }
+#data:hover {
+  background-color: darkgray;
+}
+#submit:hover {
+  background-color: darkgray;
+}
 /* This small section is specifically for the About Me page */
 .centerbtns {
 display: flex;
