@@ -58,6 +58,39 @@ cursor: pointer;
 #submit:hover {
   background-color: darkgray;
 }
+/* Most of this area is for the URL Generator */
+input {
+  display: flex;
+  flex-flow: column nowrap;
+  width: 35%;
+  gap: 36px;
+  margin: auto;
+  }
+span {
+  display: flex;
+  flex-flow: column nowrap;
+  width: 35%;
+  gap: 36px;
+  margin: auto;
+  }
+textarea {
+  background-color: #6a6d81;
+  min-height: 70px;
+  max-height: none;
+  border: 2px solid #ccaf9b;
+  border-radius: 10px;
+  margin: 10px;
+  display: block;
+  padding: 30px;
+}
+/* The main difference between centerobj and centerbtns is the gap between objects */
+.centerobj {
+  display: flex;
+  flex-flow: column nowrap;
+  width: 35%;
+  gap: 5px;
+  margin: auto;
+  }
 /* This small section is specifically for the About Me page */
 .centerbtns {
 display: flex;

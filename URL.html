@@ -17,22 +17,30 @@
   <span id="detection-info"></span>
 
   <h2>Generate range:</h2>
-  from <input id="range-start" type="number" value="1" style="width: 90px">
-  to <input id="range-end" type="number" value="10" style="width: 90px">
-  step <input id="range-step" type="number" value="1" min="1" style="width: 70px">
-  pad <input id="pad-length" type="number" min="0" max="10" placeholder="off" style="width: 70px">
+  <div class="centerobj">
+    <h3>From:</h3> 
+    <input id="range-start" type="number" value="1" style="width: 90px">
+    <h3>To:</h3> 
+    <input id="range-end" type="number" value="10" style="width: 90px">
+    <h3>Step:</h3> 
+    <input id="range-step" type="number" value="1" min="1" style="width: 70px">
+    <h3>Pad 0s:</h3> 
+    <input id="pad-length" type="number" min="0" max="10" placeholder="off" style="width: 70px">
+  </div>
   <br><br>
-  <button id="generate-urls-button">Generate URLs</button>
-  <button id="copy-urls-button">Copy to Clipboard</button>
-  <span id="status"></span>
+  <div class="centerbtns">
+    <button id="generate-urls-button">Generate URLs</button>
+    <button id="copy-urls-button">Copy to Clipboard</button>
+    <span id="status"></span>
+  </div>
 
   <br><br>
-  <textarea id="urls-textarea" readonly rows="15" cols="85"></textarea>
-
+  <div class="centerobj">
+    <textarea id="urls-textarea" readonly rows="15" cols="85"></textarea>
+  </div>
   <script>
 const $ = (id) => document.getElementById(id);
 
-// Find the most likely "page number" in a URL by scoring each numeric run.
 function detectPageNumber(url) {
   const candidates = [];
   const re = /\d+/g;
@@ -43,36 +51,31 @@ function detectPageNumber(url) {
     const before = url.slice(0, start);
     const after = url.slice(start + numStr.length);
     let score = 0;
-    // Strong signal: preceded by page-ish keywords
     if (/(page|p|pg|pn|start|offset|index|idx)[=/]$/i.test(before)) score += 10;
-    else if (/\/$/i.test(before)) score += 4;          // path segment like /3/
-    else if (/=$/.test(before)) score += 3;            // any query param value
-    // Penalize ports and TLDs
-    if (/:$/.test(before)) score -= 10;                // host:port
+    else if (/\/$/i.test(before)) score += 4;
+    else if (/=$/.test(before)) score += 3;
+    if (/:$/.test(before)) score -= 10;
     if (/^(\.com|\.net|\.org|\.io)/i.test(after)) score -= 10;
-    // Bonus for being at end or followed by separator
     if (after === '' || /^[/?&#]/.test(after)) score += 2;
     candidates.push({ numStr, start, end: start + numStr.length, score });
   }
   if (!candidates.length) return null;
-  // Highest score wins; ties go to the last occurrence (page numbers are usually late)
   candidates.sort((a, b) => b.score - a.score || b.start - a.start);
   const best = candidates[0];
   if (best.score <= 0) return null;
   return {
     value: parseInt(best.numStr, 10),
-    numStr,
+    numStr: best.numStr,
     start: best.start,
     end: best.end
   };
 }
 
-// Re-detect whenever the URL changes
 $('base-url-input').addEventListener('input', () => {
   const det = detectPageNumber($('base-url-input').value.trim());
   $('detected-number').value = det ? det.value : '';
   $('detection-info').textContent = det
-    ? `Found "${det.numStr}" — it will be replaced.`
+    ? 'Found "' + det.numStr + '" — it will be replaced.'
     : 'No page number detected.';
 });
 
@@ -86,7 +89,7 @@ $('generate-urls-button').addEventListener('click', () => {
 
   const det = detectPageNumber(baseURL);
   if (!det) {
-    status.textContent = 'Could not detect a page number in the URL. Include one (e.g. ?page=1).';
+    status.textContent = 'Could not detect a page number. Include one (e.g. ?page=1).';
     return;
   }
   if (isNaN(start) || isNaN(end) || start > end) {
@@ -102,12 +105,12 @@ $('generate-urls-button').addEventListener('click', () => {
   let count = 0;
   for (let i = start; i <= end; i += step) {
     const num = String(i).padStart(Math.max(pad, det.numStr.length), '0');
-    urls += baseURL.slice(0, det.start) + num + baseURL.slice(det.end) + '\n';
+    urls += baseURL.slice(0, det.start) + num + baseURL.slice(det.end) + '\n\n';
     count++;
   }
 
   $('urls-textarea').value = urls;
-  status.textContent = `Replaced "${det.numStr}" → generated ${count} URL${count === 1 ? '' : 's'}.`;
+  status.textContent = 'Replaced "' + det.numStr + '" → generated ' + count + ' URL' + (count === 1 ? '' : 's') + '.';
 });
 
 $('copy-urls-button').addEventListener('click', async () => {
