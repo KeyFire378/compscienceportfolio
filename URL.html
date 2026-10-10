@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>URL Generator</title>
   <link rel="stylesheet" href="other.css">
 </head>
@@ -8,51 +9,84 @@
   <h1>URL Generator</h1>
 
   <h2>Enter the Base URL:</h2>
-  <input id="base-url-input" type="text" placeholder="https://example.com">
-  <button id="generate-urls-button">Generate URLs</button>
+  <!-- Use {} as a placeholder for where numbers go, e.g. https://example.com/page/{}/item -->
+  <input id="base-url-input" type="text" placeholder="https://example.com/page/{}/item" size="60">
 
   <h2>Enter the Range:</h2>
-  <input id="range-input" type="text" placeholder="1-10">
-  <br>
-  <br>
-  <textarea id="urls-textarea" readonly></textarea>
+  <input id="range-start" type="number" placeholder="Start" value="1">
+  to
+  <input id="range-end" type="number" placeholder="End" value="10">
+  <label>
+    Step: <input id="range-step" type="number" placeholder="Step" value="1" min="1">
+  </label>
+  <label>
+    Padding: <input id="pad-length" type="number" placeholder="Digits (e.g. 3)" min="0" max="10">
+  </label>
+  <br><br>
+  <button id="generate-urls-button">Generate URLs</button>
+  <button id="copy-urls-button">Copy to Clipboard</button>
+  <span id="status"></span>
+
+  <br><br>
+  <textarea id="urls-textarea" readonly rows="15" cols="80"></textarea>
 
   <script>
-document.getElementById('generate-urls-button').addEventListener('click', () => {
-  const baseInput = document.getElementById('base-url-input');
-  const rangeInput = document.getElementById('range-input');
-  const urlsTexterea = document.getElementById('urls-textarea');
+const $ = (id) => document.getElementById(id);
 
-  const baseURL = baseInput.value;
-  const range = rangeInput.value.split('-');
-  const start = parseInt(range[0], 10);
-  const end = parseInt(range[1], 10);
+$('generate-urls-button').addEventListener('click', () => {
+  const baseURL = $('base-url-input').value.trim();
+  const start = parseInt($('range-start').value, 10);
+  const end = parseInt($('range-end').value, 10);
+  const step = Math.max(1, parseInt($('range-step').value, 10) || 1);
+  const pad = parseInt($('pad-length').value, 10) || 0;
+  const urlsTextarea = $('urls-textarea');
+  const status = $('status');
 
+  // Basic validation
+  if (!baseURL) {
+    status.textContent = 'Please enter a base URL.';
+    return;
+  }
   if (isNaN(start) || isNaN(end) || start > end) {
-    alert('Please enter a valid range in the format "start-end"');
+    status.textContent = 'Invalid range: start must be ≤ end.';
+    return;
+  }
+  if (end - start > 100000) {
+    status.textContent = 'Range too large (max 100,000 URLs).';
     return;
   }
 
-  // Find the position of the range in the base URL
-  const rangePosition = baseURL.indexOf(rangeInput.value);
-
-  if (rangePosition === -1) {
-    alert('Please enter a valid range within the base URL');
-    return;
-  }
-
-  // Remove the range from the base URL
-  const updatedBaseURL = baseURL.slice(0, rangePosition) + baseURL.slice(rangePosition + rangeInput.value.length);
-
+  // Build URLs: replace {} placeholder, or append /N if no placeholder
+  const hasPlaceholder = baseURL.includes('{}');
   let urls = '';
+  let count = 0;
 
-  for (let i = start; i <= end; i++) {
-    urls += `${updatedBaseURL}/${i}\n`;
+  for (let i = start; i <= end; i += step) {
+    const num = String(i).padStart(pad, '0');
+    const url = hasPlaceholder
+      ? baseURL.replaceAll('{}', num)
+      : `${baseURL.replace(/\/+$/, '')}/${num}`;
+    urls += url + '\n';
+    count++;
   }
 
-  urlsTexterea.value = urls;
+  urlsTextarea.value = urls;
+  status.textContent = `Generated ${count} URL${count === 1 ? '' : 's'}.`;
+});
+
+$('copy-urls-button').addEventListener('click', async () => {
+  const text = $('urls-textarea').value;
+  if (!text) return;
+  try {
+    await navigator.clipboard.writeText(text);
+    $('status').textContent = 'Copied to clipboard!';
+  } catch {
+    // Fallback for older browsers / non-secure contexts
+    $('urls-textarea').select();
+    document.execCommand('copy');
+    $('status').textContent = 'Copied to clipboard!';
+  }
 });
   </script>
-
 </body>
 </html>
