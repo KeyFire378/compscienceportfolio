@@ -8,30 +8,73 @@
 <body>
   <h1>URL Generator</h1>
 
-  <h2>Enter the Base URL:</h2>
-  <!-- Use {} as a placeholder for where numbers go, e.g. https://example.com/page/{}/item -->
-  <input id="base-url-input" type="text" placeholder="https://example.com/page/{}/item" size="60">
+  <h2>Enter a sample URL containing the page number:</h2>
+  <input id="base-url-input" type="text" size="70"
+         placeholder="https://example.com/articles/page/3?sort=new">
 
-  <h2>Enter the Range:</h2>
-  <input id="range-start" type="number" placeholder="Start" value="1">
-  to
-  <input id="range-end" type="number" placeholder="End" value="10">
-  <label>
-    Step: <input id="range-step" type="number" placeholder="Step" value="1" min="1">
-  </label>
-  <label>
-    Padding: <input id="pad-length" type="number" placeholder="Digits (e.g. 3)" min="0" max="10">
-  </label>
+  <h2>Detected page number:</h2>
+  <input id="detected-number" type="number" readonly style="width: 120px">
+  <span id="detection-info"></span>
+
+  <h2>Generate range:</h2>
+  from <input id="range-start" type="number" value="1" style="width: 90px">
+  to <input id="range-end" type="number" value="10" style="width: 90px">
+  step <input id="range-step" type="number" value="1" min="1" style="width: 70px">
+  pad <input id="pad-length" type="number" min="0" max="10" placeholder="off" style="width: 70px">
   <br><br>
   <button id="generate-urls-button">Generate URLs</button>
   <button id="copy-urls-button">Copy to Clipboard</button>
   <span id="status"></span>
 
   <br><br>
-  <textarea id="urls-textarea" readonly rows="15" cols="80"></textarea>
+  <textarea id="urls-textarea" readonly rows="15" cols="85"></textarea>
 
   <script>
 const $ = (id) => document.getElementById(id);
+
+// Find the most likely "page number" in a URL by scoring each numeric run.
+function detectPageNumber(url) {
+  const candidates = [];
+  const re = /\d+/g;
+  let m;
+  while ((m = re.exec(url)) !== null) {
+    const numStr = m[0];
+    const start = m.index;
+    const before = url.slice(0, start);
+    const after = url.slice(start + numStr.length);
+    let score = 0;
+    // Strong signal: preceded by page-ish keywords
+    if (/(page|p|pg|pn|start|offset|index|idx)[=/]$/i.test(before)) score += 10;
+    else if (/\/$/i.test(before)) score += 4;          // path segment like /3/
+    else if (/=$/.test(before)) score += 3;            // any query param value
+    // Penalize ports and TLDs
+    if (/:$/.test(before)) score -= 10;                // host:port
+    if (/^(\.com|\.net|\.org|\.io)/i.test(after)) score -= 10;
+    // Bonus for being at end or followed by separator
+    if (after === '' || /^[/?&#]/.test(after)) score += 2;
+    candidates.push({ numStr, start, end: start + numStr.length, score });
+  }
+  if (!candidates.length) return null;
+  // Highest score wins; ties go to the last occurrence (page numbers are usually late)
+  candidates.sort((a, b) => b.score - a.score || b.start - a.start);
+  const best = candidates[0];
+  if (best.score <= 0) return null;
+  return {
+    value: parseInt(best.numStr, 10),
+    numStr,
+    start: best.start,
+    end: best.end
+  };
+}
+
+// Re-detect whenever the URL changes
+$('base-url-input').addEventListener('input', () => {
+  const det = detectPageNumber($('base-url-input').value.trim());
+  $('detected-number').value = det ? det.value : '';
+  $('detection-info').textContent = det
+    ? `Found "${det.numStr}" — it will be replaced.`
+    : 'No page number detected.';
+});
 
 $('generate-urls-button').addEventListener('click', () => {
   const baseURL = $('base-url-input').value.trim();
@@ -39,12 +82,11 @@ $('generate-urls-button').addEventListener('click', () => {
   const end = parseInt($('range-end').value, 10);
   const step = Math.max(1, parseInt($('range-step').value, 10) || 1);
   const pad = parseInt($('pad-length').value, 10) || 0;
-  const urlsTextarea = $('urls-textarea');
   const status = $('status');
 
-  // Basic validation
-  if (!baseURL) {
-    status.textContent = 'Please enter a base URL.';
+  const det = detectPageNumber(baseURL);
+  if (!det) {
+    status.textContent = 'Could not detect a page number in the URL. Include one (e.g. ?page=1).';
     return;
   }
   if (isNaN(start) || isNaN(end) || start > end) {
@@ -56,22 +98,16 @@ $('generate-urls-button').addEventListener('click', () => {
     return;
   }
 
-  // Build URLs: replace {} placeholder, or append /N if no placeholder
-  const hasPlaceholder = baseURL.includes('{}');
   let urls = '';
   let count = 0;
-
   for (let i = start; i <= end; i += step) {
-    const num = String(i).padStart(pad, '0');
-    const url = hasPlaceholder
-      ? baseURL.replaceAll('{}', num)
-      : `${baseURL.replace(/\/+$/, '')}/${num}`;
-    urls += url + '\n';
+    const num = String(i).padStart(Math.max(pad, det.numStr.length), '0');
+    urls += baseURL.slice(0, det.start) + num + baseURL.slice(det.end) + '\n';
     count++;
   }
 
-  urlsTextarea.value = urls;
-  status.textContent = `Generated ${count} URL${count === 1 ? '' : 's'}.`;
+  $('urls-textarea').value = urls;
+  status.textContent = `Replaced "${det.numStr}" → generated ${count} URL${count === 1 ? '' : 's'}.`;
 });
 
 $('copy-urls-button').addEventListener('click', async () => {
@@ -79,13 +115,11 @@ $('copy-urls-button').addEventListener('click', async () => {
   if (!text) return;
   try {
     await navigator.clipboard.writeText(text);
-    $('status').textContent = 'Copied to clipboard!';
   } catch {
-    // Fallback for older browsers / non-secure contexts
     $('urls-textarea').select();
     document.execCommand('copy');
-    $('status').textContent = 'Copied to clipboard!';
   }
+  $('status').textContent = 'Copied to clipboard!';
 });
   </script>
 </body>
