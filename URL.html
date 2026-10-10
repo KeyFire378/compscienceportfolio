@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>URL Generator</title>
+</head>
+<body>
+  <h1>URL Generator</h1>
+
+  <h2>Enter the Base URL:</h2>
+  <input id="base-url-input" type="text" placeholder="https://example.com">
+  <button id="generate-urls-button">Generate URLs</button>
+
+  <h2>Enter the Range:</h2>
+  <input id="range-input" type="text" placeholder="1-10">
+  <br>
+  <br>
+  <textarea id="urls-textarea" readonly></textarea>
+
+  <script>
+document.getElementById('generate-urls-button').addEventListener('click', () => {
+  const baseInput = document.getElementById('base-url-input');
+  const rangeInput = document.getElementById('range-input');
+  const urlsTexterea = document.getElementById('urls-textarea');
+
+  const baseURL = baseInput.value;
+  const range = rangeInput.value.split('-');
+  const start = parseInt(range[0], 10);
+  const end = parseInt(range[1], 10);
+
+  if (isNaN(start) || isNaN(end) || start > end) {
+    alert('Please enter a valid range in the format "start-end"');
+    return;
+  }
+
+  // Find the position of the range in the base URL
+  const rangePosition = baseURL.indexOf(rangeInput.value);
+
+  if (rangePosition === -1) {
+    alert('Please enter a valid range within the base URL');
+    return;
+  }
+
+  // Remove the range from the base URL
+  const updatedBaseURL = baseURL.slice(0, rangePosition) + baseURL.slice(rangePosition + rangeInput.value.length);
+
+  let urls = '';
+
+  for (let i = start; i <= end; i++) {
+    urls += `${updatedBaseURL}/${i}\n`;
+  }
+
+  urlsTexterea.value = urls;
+});
+  </script>
+
+</body>
+</html>
